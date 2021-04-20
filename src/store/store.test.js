@@ -1,19 +1,14 @@
+import fetchMock from 'fetch-mock';
+import { SELECT_FILTER_TYPES, REQUEST_STATE_TYPES, initialState } from './index';
+import { ACTION_TYPES, getItems, addItem, removeItem } from './actions';
 import {
-  reducer,
-  initialState,
-  ACTION_TYPES,
-  SELECT_FILTER_TYPES,
-  REQUEST_STATE_TYPES,
-  addItem,
-  getItems,
-  removeItem,
   selectByFilter,
   selectBySearchString,
   selectFilteredList,
   selectItemsCount
-} from './store';
-import fetchMock from 'fetch-mock';
-import { makeTestStore } from './setupTests';
+} from './selectors';
+import reducer from './reducer';
+import { makeTestStore } from '../setupTests';
 
 const title = 'Покормить цветы';
 const substring = 'Кот';
