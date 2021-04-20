@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ListItem from '../ListItem/ListItem';
-import { getItems, IItem, selectFilteredList } from '../../store/store';
+import { getItems, IItem, selectFilteredList } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 type DecoupledListProps = {

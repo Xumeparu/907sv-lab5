@@ -1,12 +1,5 @@
-import thunkMiddleware from 'redux-thunk';
-import { createStore, applyMiddleware } from 'redux';
 import api from '../api';
-
-export interface IItem {
-  id: string;
-  title: string;
-  isChecked: boolean;
-}
+import { SELECT_FILTER_TYPE, REQUEST_STATE_TYPES, IItem, AppDispatch } from './index';
 
 export const ACTION_TYPES = {
   ADD: 'add',
@@ -19,13 +12,6 @@ export const ACTION_TYPES = {
   SET_REQUEST_STATE: 'setRequestState',
   SET_ERROR: 'setError'
 } as const;
-
-export enum REQUEST_STATE_TYPES {
-  IDLE,
-  LOADING,
-  SUCCESS,
-  ERROR
-}
 
 export type ACTION_TYPE =
   | typeof ACTION_TYPES.ADD
@@ -48,17 +34,6 @@ export type IAction =
   | IActionSelectBySearchString
   | IActionSetRequestState
   | IActionSetError;
-
-export const SELECT_FILTER_TYPES = {
-  ALL: 'Все',
-  DONE: 'Выполненные',
-  NOT_DONE: 'Не выполненные'
-} as const;
-
-export type SELECT_FILTER_TYPE =
-  | typeof SELECT_FILTER_TYPES.ALL
-  | typeof SELECT_FILTER_TYPES.DONE
-  | typeof SELECT_FILTER_TYPES.NOT_DONE;
 
 export interface IActionAdd {
   type: typeof ACTION_TYPES.ADD;
@@ -106,95 +81,6 @@ export interface IActionSetRequestState {
 export interface IActionSetError {
   type: typeof ACTION_TYPES.SET_ERROR;
   payload: string;
-}
-
-export type Store = {
-  list: IItem[];
-  filter: SELECT_FILTER_TYPE;
-  substring: string;
-  requestState: REQUEST_STATE_TYPES;
-  error: string;
-};
-
-export const initialState = {
-  list: [],
-  filter: SELECT_FILTER_TYPES.ALL,
-  substring: '',
-  requestState: REQUEST_STATE_TYPES.IDLE,
-  error: ''
-};
-
-export function reducer(state: Store = initialState, action: IAction): Store {
-  switch (action.type) {
-    case ACTION_TYPES.ADD: {
-      return { ...state, list: [...state.list, action.payload] };
-    }
-    case ACTION_TYPES.ADD_ALL: {
-      return { ...state, list: [...action.payload] };
-    }
-    case ACTION_TYPES.REMOVE: {
-      return { ...state, list: [...state.list.filter(item => item.id !== action.payload)] };
-    }
-    case ACTION_TYPES.CHECKED: {
-      return {
-        ...state,
-        list: [
-          ...state.list.map(function (item) {
-            if (item.id === action.payload) {
-              return { ...item, isChecked: !item.isChecked };
-            }
-            return item;
-          })
-        ]
-      };
-    }
-    case ACTION_TYPES.EDIT: {
-      return {
-        ...state,
-        list: [
-          ...state.list.map(function (item) {
-            if (item.id === action.payload.id) {
-              return { ...item, title: action.payload.title };
-            }
-            return item;
-          })
-        ]
-      };
-    }
-    case ACTION_TYPES.SELECT_BY_FILTER: {
-      return { ...state, filter: action.payload };
-    }
-    case ACTION_TYPES.SELECT_BY_SEARCH_STRING: {
-      return { ...state, substring: action.payload };
-    }
-    case ACTION_TYPES.SET_REQUEST_STATE: {
-      return { ...state, requestState: action.payload };
-    }
-    case ACTION_TYPES.SET_ERROR: {
-      return { ...state, error: action.payload };
-    }
-    default:
-      return state;
-  }
-}
-
-export function selectByFilter(list: IItem[], filter: SELECT_FILTER_TYPE) {
-  if (filter === SELECT_FILTER_TYPES.DONE) return list.filter(item => item.isChecked);
-  if (filter === SELECT_FILTER_TYPES.NOT_DONE) return list.filter(item => !item.isChecked);
-  return list;
-}
-
-export function selectBySearchString(list: IItem[], substring: string): IItem[] {
-  if (substring === '') return list;
-  return list.filter(item => item.title.toLowerCase().includes(substring.toLowerCase()));
-}
-
-export function selectFilteredList(state: Store): IItem[] {
-  return selectByFilter(selectBySearchString(state.list, state.substring), state.filter);
-}
-
-export function selectItemsCount(state: Store): number {
-  return selectFilteredList(state).length;
 }
 
 const setRequestState = (requestState: REQUEST_STATE_TYPES) => ({
@@ -266,7 +152,3 @@ export const editItem = (id: string, title: string) => async (dispatch: AppDispa
     dispatch(setRequestState(REQUEST_STATE_TYPES.ERROR));
   }
 };
-
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
-type AppDispatch = typeof store.dispatch;
-export default store;

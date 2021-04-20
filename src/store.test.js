@@ -13,7 +13,7 @@ import {
   selectItemsCount
 } from './store';
 import fetchMock from 'fetch-mock';
-import { makeTestStore } from '../setupTests';
+import { makeTestStore } from './setupTests';
 
 const title = 'Покормить цветы';
 const substring = 'Кот';
