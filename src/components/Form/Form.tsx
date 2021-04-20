@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { Store, REQUEST_STATE_TYPES, addItem } from '../../store';
+import { Store, REQUEST_STATE_TYPES } from '../../store';
+import { addItem } from '../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Form() {
