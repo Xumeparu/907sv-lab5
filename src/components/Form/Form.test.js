@@ -1,9 +1,9 @@
 import { screen, fireEvent } from '@testing-library/react';
-import Form from './Form';
 import React from 'react';
-import { makeTestStore, testRender } from '../../setupTests';
+import Form from './Form';
+import { REQUEST_STATE_TYPES } from '../../store/reducers/todoSlice';
 import { ACTION_TYPES } from '../../store/actions';
-import { REQUEST_STATE_TYPES } from '../../store/index';
+import { makeTestStore, testRender } from '../../setupTests';
 
 test('Форма позволяет вводить данные, вызывает обработчик', () => {
   const store = makeTestStore({ useMockStore: true });

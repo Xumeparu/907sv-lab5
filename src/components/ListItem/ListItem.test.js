@@ -1,7 +1,7 @@
 import { screen, fireEvent } from '@testing-library/react';
-import ListItem from './ListItem';
 import React from 'react';
-import { REQUEST_STATE_TYPES } from '../../store';
+import ListItem from './ListItem';
+import { REQUEST_STATE_TYPES } from '../../store/reducers/todoSlice';
 import { ACTION_TYPES } from '../../store/actions';
 import { makeTestStore, testRender } from '../../setupTests';
 

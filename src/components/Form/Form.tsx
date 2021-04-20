@@ -1,11 +1,12 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { Store, REQUEST_STATE_TYPES } from '../../store';
-import { addItem } from '../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { Store } from '../../store';
+import { REQUEST_STATE_TYPES } from '../../store/reducers/todoSlice';
+import { addItem } from '../../store/actions';
 
 export default function Form() {
   const dispatch = useDispatch();
-  const requestState = useSelector((state: Store) => state.requestState);
+  const requestState = useSelector((state: Store) => state.todo.requestState);
   const [disabled, setDisabled] = useState(false);
   const [value, setValue] = useState('');
 

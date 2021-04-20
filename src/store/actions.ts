@@ -1,5 +1,7 @@
 import api from '../api';
-import { SELECT_FILTER_TYPE, REQUEST_STATE_TYPES, IItem, AppDispatch } from './index';
+import { AppDispatch } from './index';
+import { IItem, REQUEST_STATE_TYPES } from './reducers/todoSlice';
+import { SELECT_FILTER_TYPE } from './reducers/filterSlice';
 
 export const ACTION_TYPES = {
   ADD: 'add',
@@ -96,7 +98,7 @@ const setError = (error: string) => ({
 export const addItem = (title: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(setRequestState(REQUEST_STATE_TYPES.LOADING));
-    const data = await api.todos.add({ title });
+    const data = await api.todo.add({ title });
     dispatch({ type: ACTION_TYPES.ADD, payload: data });
     dispatch(setRequestState(REQUEST_STATE_TYPES.SUCCESS));
   } catch (error) {
@@ -108,7 +110,7 @@ export const addItem = (title: string) => async (dispatch: AppDispatch) => {
 export const getItems = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(setRequestState(REQUEST_STATE_TYPES.LOADING));
-    const data = await api.todos.list();
+    const data = await api.todo.list();
     dispatch({ type: ACTION_TYPES.ADD_ALL, payload: data });
     dispatch(setRequestState(REQUEST_STATE_TYPES.SUCCESS));
   } catch (error) {
@@ -120,7 +122,7 @@ export const getItems = () => async (dispatch: AppDispatch) => {
 export const removeItem = (id: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(setRequestState(REQUEST_STATE_TYPES.LOADING));
-    const data = await api.todos.remove({ id });
+    const data = await api.todo.remove({ id });
     dispatch({ type: ACTION_TYPES.REMOVE, payload: id });
     dispatch(setRequestState(REQUEST_STATE_TYPES.SUCCESS));
   } catch (error) {
@@ -132,7 +134,7 @@ export const removeItem = (id: string) => async (dispatch: AppDispatch) => {
 export const checkedItem = (id: string, isChecked: boolean) => async (dispatch: AppDispatch) => {
   try {
     dispatch(setRequestState(REQUEST_STATE_TYPES.LOADING));
-    const data = await api.todos.checked({ id, isChecked });
+    const data = await api.todo.checked({ id, isChecked });
     dispatch({ type: ACTION_TYPES.CHECKED, payload: data.id });
     dispatch(setRequestState(REQUEST_STATE_TYPES.SUCCESS));
   } catch (error) {
@@ -144,7 +146,7 @@ export const checkedItem = (id: string, isChecked: boolean) => async (dispatch: 
 export const editItem = (id: string, title: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(setRequestState(REQUEST_STATE_TYPES.LOADING));
-    const data = await api.todos.edit({ id, title });
+    const data = await api.todo.edit({ id, title });
     dispatch({ type: ACTION_TYPES.EDIT, payload: data });
     dispatch(setRequestState(REQUEST_STATE_TYPES.SUCCESS));
   } catch (error) {

@@ -18,7 +18,7 @@ async function handleAlert(response: any) {
 }
 
 const api = {
-  todos: {
+  todo: {
     add: ({ title }: { title: string }) =>
       fetch(`${URL}/todos`, {
         method: 'POST',

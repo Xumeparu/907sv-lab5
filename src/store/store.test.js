@@ -1,5 +1,7 @@
 import fetchMock from 'fetch-mock';
-import { SELECT_FILTER_TYPES, REQUEST_STATE_TYPES, initialState } from './index';
+import { initialState, rootReducer } from './index';
+import { REQUEST_STATE_TYPES } from './reducers/todoSlice';
+import { SELECT_FILTER_TYPES } from './reducers/filterSlice';
 import { ACTION_TYPES, getItems, addItem, removeItem } from './actions';
 import {
   selectByFilter,
@@ -7,7 +9,6 @@ import {
   selectFilteredList,
   selectItemsCount
 } from './selectors';
-import reducer from './reducer';
 import { makeTestStore } from '../setupTests';
 
 const title = 'Покормить цветы';
@@ -38,11 +39,11 @@ describe('Проверка функционирования store.js', () => {
       payload: list[1]
     };
 
-    const newState = reducer(state, action);
+    const newState = rootReducer(state, action);
 
-    expect(newState.list.length).toEqual(1);
-    expect(newState.list[0]).toHaveProperty('id');
-    expect(newState.list[0].title).toEqual(title);
+    expect(newState.todo.list.length).toEqual(1);
+    expect(newState.todo.list[0]).toHaveProperty('id');
+    expect(newState.todo.list[0].title).toEqual(title);
   });
 
   test('Проверка добавления всех элементов (ACTION_TYPES.ADD_ALL)', () => {
@@ -51,8 +52,8 @@ describe('Проверка функционирования store.js', () => {
       payload: list
     };
 
-    const state = reducer(initialState, addAllAction);
-    expect(state.list.length).toEqual(list.length);
+    const state = rootReducer(initialState, addAllAction);
+    expect(state.todo.list.length).toEqual(list.length);
   });
 
   test('Проверка удаления элемента (ACTION_TYPES.REMOVE)', () => {
@@ -61,15 +62,15 @@ describe('Проверка функционирования store.js', () => {
       payload: title
     };
 
-    let state = reducer(initialState, addAction);
+    let state = rootReducer(initialState, addAction);
 
     const removeAction = {
       type: ACTION_TYPES.REMOVE,
-      payload: state.list[0].id
+      payload: state.todo.list[0].id
     };
 
-    state = reducer(state, removeAction);
-    expect(state.list.length).toEqual(0);
+    state = rootReducer(state, removeAction);
+    expect(state.todo.list.length).toEqual(0);
   });
 
   test('Проверка изменения параметра элемента (ACTION_TYPES.CHECKED)', () => {
@@ -78,16 +79,16 @@ describe('Проверка функционирования store.js', () => {
       payload: title
     };
 
-    let state = reducer(initialState, addAction);
-    state = reducer(state, addAction);
+    let state = rootReducer(initialState, addAction);
+    state = rootReducer(state, addAction);
 
     const checkedAction = {
       type: ACTION_TYPES.CHECKED,
-      payload: state.list[0].id
+      payload: state.todo.list[0].id
     };
 
-    state = reducer(state, checkedAction);
-    expect(state.list[0].isChecked).toBeTruthy();
+    state = rootReducer(state, checkedAction);
+    expect(state.todo.list[0].isChecked).toBeTruthy();
   });
 
   test('Проверка изменения элемента (ACTION_TYPES.EDIT)', () => {
@@ -98,16 +99,16 @@ describe('Проверка функционирования store.js', () => {
       payload: title
     };
 
-    let state = reducer(initialState, addAction);
-    state = reducer(state, addAction);
+    let state = rootReducer(initialState, addAction);
+    state = rootReducer(state, addAction);
 
     const editAction = {
       type: ACTION_TYPES.EDIT,
-      payload: { id: state.list[0].id, title: newTitle }
+      payload: { id: state.todo.list[0].id, title: newTitle }
     };
 
-    state = reducer(state, editAction);
-    expect(state.list[0].title).toEqual(newTitle);
+    state = rootReducer(state, editAction);
+    expect(state.todo.list[0].title).toEqual(newTitle);
   });
 
   test('Проверка изменения фильтра элемента (ACTION_TYPES.SELECT_FILTER)', () => {
@@ -116,16 +117,16 @@ describe('Проверка функционирования store.js', () => {
       payload: title
     };
 
-    let state = reducer(initialState, addAction);
+    let state = rootReducer(initialState, addAction);
 
     const selectFilterAction = {
       type: ACTION_TYPES.SELECT_BY_FILTER,
       payload: SELECT_FILTER_TYPES.DONE
     };
 
-    state = reducer(state, selectFilterAction);
-    expect(state.list.length).toEqual(1);
-    expect(state.filter).toEqual(SELECT_FILTER_TYPES.DONE);
+    state = rootReducer(state, selectFilterAction);
+    expect(state.todo.list.length).toEqual(1);
+    expect(state.filter.itemState).toEqual(SELECT_FILTER_TYPES.DONE);
   });
 
   test('Проверка поиска элемента по подстроке (ACTION_TYPES.SELECT_BY_SEARCH_STRING)', () => {
@@ -134,17 +135,17 @@ describe('Проверка функционирования store.js', () => {
       payload: list[0]
     };
 
-    let state = reducer(initialState, addAction);
+    let state = rootReducer(initialState, addAction);
 
     const selectBySearchStringAction = {
       type: ACTION_TYPES.SELECT_BY_SEARCH_STRING,
       payload: substring
     };
 
-    state = reducer(state, selectBySearchStringAction);
-    expect(state.list.length).toEqual(1);
-    expect(state.list[0].isChecked).toEqual(list[0].isChecked);
-    expect(state.substring).toEqual(substring);
+    state = rootReducer(state, selectBySearchStringAction);
+    expect(state.todo.list.length).toEqual(1);
+    expect(state.todo.list[0].isChecked).toEqual(list[0].isChecked);
+    expect(state.filter.substring).toEqual(substring);
   });
 
   test('Проверка фильтрации списка selectByFilter', () => {
@@ -168,9 +169,11 @@ describe('Проверка функционирования store.js', () => {
   test('Проверка фильтрации списка selectFilteredList', () => {
     const state = {
       ...initialState,
-      list,
-      substring: 'цве',
-      filter: SELECT_FILTER_TYPES.DONE
+      todo: { list },
+      filter: {
+        filter: SELECT_FILTER_TYPES.DONE,
+        substring: 'цве'
+      }
     };
     const filteredList = selectFilteredList(state);
     expect(filteredList.length).toEqual(1);
@@ -181,13 +184,13 @@ describe('Проверка функционирования store.js', () => {
     const defaultAction = {
       type: null
     };
-    let state = reducer(initialState, defaultAction);
-    expect(state.list.length).toEqual(0);
+    let state = rootReducer(initialState, defaultAction);
+    expect(state.todo.list.length).toEqual(0);
   });
 
   test('Проверка selectItemsCount', () => {
     const itemsCount = selectItemsCount(state);
-    expect(itemsCount).toBe(state.list.length);
+    expect(itemsCount).toBe(state.todo.list.length);
   });
 });
 

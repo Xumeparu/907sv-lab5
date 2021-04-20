@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { checkedItem, editItem, removeItem } from '../../store/actions';
 import { useDispatch } from 'react-redux';
+import { checkedItem, editItem, removeItem } from '../../store/actions';
 
 type ListItemProps = {
   id: string;

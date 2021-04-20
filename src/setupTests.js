@@ -3,10 +3,9 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { initialState as originalInitialState } from './store';
+import { initialState as originalInitialState, rootReducer } from './store';
 import thunkMiddleware from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import reducer from './store/reducer';
 
 const middlewares = [thunkMiddleware];
 const mockStore = configureStore(middlewares);
@@ -26,7 +25,7 @@ export function makeTestStore({ initialState = originalInitialState, useMockStor
     }
     store = mockStore(initialState);
   } else {
-    store = createStore(reducer, initialState);
+    store = createStore(rootReducer, initialState);
   }
 
   const origDispatch = store.dispatch;

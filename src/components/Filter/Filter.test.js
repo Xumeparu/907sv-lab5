@@ -1,12 +1,12 @@
 import { screen, fireEvent } from '@testing-library/react';
-import Filter from './Filter';
 import React from 'react';
-import { SELECT_FILTER_TYPES } from '../../store';
+import Filter from './Filter';
+import { SELECT_FILTER_TYPES } from '../../store/reducers/filterSlice';
 import { ACTION_TYPES } from '../../store/actions';
 import { makeTestStore, testRender } from '../../setupTests';
 
 const store = makeTestStore({
-  initialState: { list: [], filter: SELECT_FILTER_TYPES.ALL, substring: '' }
+  initialState: { todo: [], filter: SELECT_FILTER_TYPES.ALL, substring: '' }
 });
 
 test('Выполнение рендера компонента Filter', () => {

@@ -1,10 +1,11 @@
-import { REQUEST_STATE_TYPES, Store } from '../../store';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Store } from '../../store';
+import { REQUEST_STATE_TYPES } from '../../store/reducers/todoSlice';
 
 export default function Alert() {
-  const requestState = useSelector((state: Store) => state.requestState);
-  const error = useSelector((state: Store) => state.error);
+  const requestState = useSelector((state: Store) => state.todo.requestState);
+  const error = useSelector((state: Store) => state.todo.error);
 
   return (
     <div>

@@ -1,4 +1,6 @@
-import { SELECT_FILTER_TYPE, SELECT_FILTER_TYPES, IItem, Store } from './index';
+import { Store } from './index';
+import { IItem } from './reducers/todoSlice';
+import { SELECT_FILTER_TYPE, SELECT_FILTER_TYPES } from './reducers/filterSlice';
 
 export function selectByFilter(list: IItem[], filter: SELECT_FILTER_TYPE) {
   if (filter === SELECT_FILTER_TYPES.DONE) return list.filter(item => item.isChecked);
@@ -12,7 +14,10 @@ export function selectBySearchString(list: IItem[], substring: string): IItem[] 
 }
 
 export function selectFilteredList(state: Store): IItem[] {
-  return selectByFilter(selectBySearchString(state.list, state.substring), state.filter);
+  return selectByFilter(
+    selectBySearchString(state.todo.list, state.filter.substring),
+    state.filter.itemState
+  );
 }
 
 export function selectItemsCount(state: Store): number {

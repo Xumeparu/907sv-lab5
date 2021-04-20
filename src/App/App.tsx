@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import Form from '../components/Form/Form';
-import List from '../components/List/List';
-import Filter from '../components/Filter/Filter';
-import ItemsCounter from '../components/ItemsCounter/ItemsCounter';
 import Alert from '../components/Alert/Alert';
+import Filter from '../components/Filter/Filter';
+import Form from '../components/Form/Form';
+import ItemsCounter from '../components/ItemsCounter/ItemsCounter';
+import List from '../components/List/List';
 
 export default function App() {
   return (
@@ -13,6 +13,7 @@ export default function App() {
         <h1>Список дел</h1>
         <h2>Лабораторная №3. Фильтруемый список в React</h2>
       </div>
+      <Alert />
       <Form />
       <div>
         <Filter />
@@ -20,7 +21,6 @@ export default function App() {
       <div>
         <ItemsCounter />
       </div>
-      <Alert />
       <List />
     </div>
   );

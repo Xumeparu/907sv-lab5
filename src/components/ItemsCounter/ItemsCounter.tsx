@@ -1,6 +1,6 @@
 import React from 'react';
-import { selectItemsCount } from '../../store';
 import { useSelector } from 'react-redux';
+import { selectItemsCount } from '../../store/selectors';
 
 export default function ItemsCounter() {
   const count = useSelector(selectItemsCount);

@@ -1,7 +1,31 @@
-import { initialState, Store } from './index';
-import { ACTION_TYPES, IAction } from './actions';
+import { ACTION_TYPES, IAction } from '../actions';
 
-export default function reducer(state: Store = initialState, action: IAction): Store {
+export enum REQUEST_STATE_TYPES {
+  IDLE,
+  LOADING,
+  SUCCESS,
+  ERROR
+}
+
+export interface IItem {
+  id: string;
+  title: string;
+  isChecked: boolean;
+}
+
+export type TodoSlice = {
+  list: IItem[];
+  requestState: REQUEST_STATE_TYPES;
+  error: string;
+};
+
+export const todoInitialState: TodoSlice = {
+  list: [],
+  requestState: REQUEST_STATE_TYPES.IDLE,
+  error: ''
+};
+
+export default function todoReducer(state = todoInitialState, action: IAction): TodoSlice {
   switch (action.type) {
     case ACTION_TYPES.ADD: {
       return { ...state, list: [...state.list, action.payload] };
@@ -37,12 +61,6 @@ export default function reducer(state: Store = initialState, action: IAction): S
           })
         ]
       };
-    }
-    case ACTION_TYPES.SELECT_BY_FILTER: {
-      return { ...state, filter: action.payload };
-    }
-    case ACTION_TYPES.SELECT_BY_SEARCH_STRING: {
-      return { ...state, substring: action.payload };
     }
     case ACTION_TYPES.SET_REQUEST_STATE: {
       return { ...state, requestState: action.payload };

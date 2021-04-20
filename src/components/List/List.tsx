@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import ListItem from '../ListItem/ListItem';
-import { IItem } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
+import ListItem from '../ListItem/ListItem';
+import { IItem } from '../../store/reducers/todoSlice';
 import { getItems } from '../../store/actions';
 import { selectFilteredList } from '../../store/selectors';
 
